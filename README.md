@@ -35,6 +35,10 @@
     ```
     docker-compose run web python manage.py createsuperuser
     ```
+* #### Collect static files for DRF
+    ```
+    docker-compose run web python manage.py collectstatic
+    ```
 * #### That is it you are good to go. The api should now be available:
     ```
     http://127.0.0.1:8001/discounts/generate-discount-tokens/
