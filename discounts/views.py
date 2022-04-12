@@ -21,7 +21,10 @@ def disable_code(request, brand_name, user_id):
 @api_view(['GET'])
 def get_discount(request, brand_name, user_id):
     if isinstance(brand_name, str) and isinstance(user_id, str):
-        discount = Discount.objects.get(brand_name=brand_name, enabled=1)
+        try:
+            discount = Discount.objects.get(brand_name=brand_name, enabled=1)
+        except Discount.DoesNotExist:
+            discount = None
         if discount:
             if discount.valid_from <= timezone.now() <= discount.valid_to:
                 if (dc := DiscountCode.objects.filter(user_id=user_id, enabled=1).first()) is not None:
@@ -45,7 +48,10 @@ def get_discount(request, brand_name, user_id):
 @api_view(['PUT'])
 def update_discount(request):
     if 'brand_name' in request.data and isinstance(request.data['brand_name'], str):
-        discount = Discount.objects.get(brand_name=request.data['brand_name'])
+        try:
+            discount = Discount.objects.get(brand_name=request.data['brand_name'])
+        except Discount.DoesNotExist:
+            discount = None
         if discount:
             serializer = DiscountSerializer(discount, data=request.data)
             if serializer.is_valid():
@@ -69,9 +75,15 @@ def generate_discount_tokens(request):
     if serializer.is_valid():
         serializer.save()
 
-        discount = Discount.objects.get(brand_name=request.data['brand_name'])
-        for i in range(0, int(request.data['number_of_codes'])):
-            DiscountCode.objects.create(discount=discount)
+        try:
+            discount = Discount.objects.get(brand_name=request.data['brand_name'])
+        except Discount.DoesNotExist:
+            discount = None
+        if discount:
+            for i in range(0, int(request.data['number_of_codes'])):
+                DiscountCode.objects.create(discount=discount)
+        else:
+            return Response("Brand not found", status=404)
 
         return JsonResponse(serializer.data, status=201)
     return JsonResponse(serializer.errors, status=400)
