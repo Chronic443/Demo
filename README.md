@@ -61,7 +61,7 @@
     ```
   * Curl:
     ``` 
-     curl -X POST -F 'brand_name=TEST_BRAND' -F 'discount_percentage=20' -F 'number_of_codes=2' -F 'enabled=1' -F 'valid_from=2022-04-11 07:29:33' -F 'valid_to=2023-04-11 07:29:33' http://127.0.0.1:8001/discounts/generate-discount-tokens/
+    curl -X POST -F 'brand_name=TEST_BRAND' -F 'discount_percentage=20' -F 'number_of_codes=2' -F 'enabled=1' -F 'valid_from=2022-04-11 07:29:33' -F 'valid_to=2023-04-11 07:29:33' http://127.0.0.1:8001/discounts/generate-discount-tokens/
     ```
 * ### ```/discounts/update_discount/```
   * METHOD: ```PUT```
@@ -84,5 +84,5 @@
   * METHOD ```GET```
   * Curl:
     ``` 
-    curl -v -X GET http://127.0.0.1/discounts/get_discount/SOME_BRAND/68150717-4604-4603-906d-bbb325e25902/
+    curl -v -X GET http://127.0.0.1:8001/discounts/get_discount/SOME_BRAND/68150717-4604-4603-906d-bbb325e25902/
     ```
