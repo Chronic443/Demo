@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -23,7 +23,7 @@ def get_discount(request, brand_name, user_id):
     if isinstance(brand_name, str) and isinstance(user_id, str):
         discount = Discount.objects.get(brand_name=brand_name, enabled=1)
         if discount:
-            if discount.valid_from >= datetime.datetime.now() > discount.valid_to:
+            if discount.valid_from >= timezone.now() > discount.valid_to:
                 if (dc := DiscountCode.objects.filter(user_id=user_id, enabled=1).first()) is not None:
                     return JsonResponse({"CODE": dc.code}, status=200)
 
